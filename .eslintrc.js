@@ -1,17 +1,18 @@
 module.exports = {
+  parserOptions: {
+    sourceType: 'module'
+  },
+  parser: 'babel-eslint',
   env: {
     node: true
   },
   extends: [
     'standard',
     'prettier',
-    'prettier/standard'
+    'prettier/standard',
+    'plugin:jest/recommended'
   ],
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module'
-  },
-  plugins: ['prettier'],
+  plugins: ['prettier', 'jest'],
   rules: {
     'promise/catch-or-return': 'error',
     'prettier/prettier': [
