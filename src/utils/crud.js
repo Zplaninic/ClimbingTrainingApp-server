@@ -74,7 +74,7 @@ export const removeOne = model => async (req, res) => {
     })
 
     if (!doc) {
-      return res.send(400).end()
+      return res.status(400).end()
     }
 
     res.status(200).json({ data: doc })

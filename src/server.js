@@ -1,6 +1,5 @@
 import express from 'express'
 import config from './config/dev'
-import cookieParser from 'cookie-parser'
 import { json, urlencoded } from 'body-parser'
 import { connect } from './utils/db'
 import { signup, signin, protectApi } from './utils/auth'
@@ -23,7 +22,6 @@ export const setResponseHeaders = (req, res, next) => {
 
 app.disable('x-powered-by')
 app.use(json())
-app.use(cookieParser())
 app.use(urlencoded({ extended: true }))
 app.use(setResponseHeaders)
 

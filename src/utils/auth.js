@@ -68,7 +68,6 @@ export const protectApi = async (req, res, next) => {
 
   let token = authHeader.split('Bearer ')[1]
   let payload
-
   try {
     payload = await verifyToken(token)
   } catch (e) {
