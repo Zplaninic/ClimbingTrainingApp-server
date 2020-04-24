@@ -1,6 +1,10 @@
 import mongoose from 'mongoose'
 
 const routeSchema = new mongoose.Schema({
+  date: {
+    type: String,
+    default: ''
+  },
   name: {
     type: String,
     trim: true,
