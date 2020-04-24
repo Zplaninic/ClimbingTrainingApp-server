@@ -4,6 +4,7 @@ import { json, urlencoded } from 'body-parser'
 import { connect } from './utils/db'
 import { signup, signin, protectApi } from './utils/auth'
 import climbingRouteRouter from './resources/climbing/route.router'
+import fingerBoardRouter from './resources/fingerboard/fingerboard.router'
 import userRouter from './resources/user/user.router'
 
 export const app = express()
@@ -21,6 +22,7 @@ export const setResponseHeaders = (req, res, next) => {
 }
 
 app.disable('x-powered-by')
+
 app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(setResponseHeaders)
@@ -31,6 +33,7 @@ app.post('/signin', signin)
 app.use('/api', protectApi)
 app.use('/api/user', userRouter)
 app.use('/api/climbing/route', climbingRouteRouter)
+app.use('/api/fingerboard/session', fingerBoardRouter)
 
 export const start = async () => {
   try {
