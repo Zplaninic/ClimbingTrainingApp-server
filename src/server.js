@@ -6,10 +6,12 @@ import { signup, signin, protectApi } from './utils/auth'
 import climbingRouteRouter from './resources/climbing/route.router'
 import fingerBoardRouter from './resources/fingerboard/fingerboard.router'
 import userRouter from './resources/user/user.router'
+import cookieParser from 'cookie-parser'
 
 export const app = express()
 export const setResponseHeaders = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*') // mozda promijenim samo za moj server
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000') // mozda promijenim samo za moj server
+  res.header('Access-Control-Allow-Credentials', 'true')
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
@@ -24,11 +26,12 @@ export const setResponseHeaders = (req, res, next) => {
 app.disable('x-powered-by')
 
 app.use(json())
+app.use(cookieParser())
 app.use(urlencoded({ extended: true }))
 app.use(setResponseHeaders)
 
-app.post('/signup', signup)
-app.post('/signin', signin)
+app.post('/api/signup', signup)
+app.post('/api/signin', signin)
 
 app.use('/api', protectApi)
 app.use('/api/user', userRouter)

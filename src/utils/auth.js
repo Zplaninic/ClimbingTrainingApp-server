@@ -25,7 +25,8 @@ export const signup = async (req, res) => {
     const user = await User.create(req.body)
     const token = newToken(user)
 
-    res.status(200).json({ token })
+    res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+    // res.status(200).json({ token })
   } catch (e) {
     console.error(e)
     res.status(400).end()
@@ -51,22 +52,21 @@ export const signin = async (req, res) => {
     }
 
     const token = newToken(user)
-    return res.status(200).send({ token })
+    return res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+    // return res.status(200).send({ token })
   } catch (e) {
     console.error(e)
-    console.log('nesto')
     res.status(500).end()
   }
 }
 
 export const protectApi = async (req, res, next) => {
-  const authHeader = req.headers.authorization
+  const token = req.cookies.token
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!token) {
     return res.status(401).end()
   }
 
-  let token = authHeader.split('Bearer ')[1]
   let payload
   try {
     payload = await verifyToken(token)
@@ -79,7 +79,6 @@ export const protectApi = async (req, res, next) => {
     .select('-password')
     .lean()
     .exec()
-
   if (!user) {
     return res.status(401).end()
   }
