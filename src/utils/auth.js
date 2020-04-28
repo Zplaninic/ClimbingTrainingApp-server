@@ -86,3 +86,7 @@ export const protectApi = async (req, res, next) => {
   req.user = user
   next()
 }
+
+export const checkToken = async (req, res) => {
+  res.sendStatus(200)
+}
