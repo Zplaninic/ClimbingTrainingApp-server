@@ -5,6 +5,7 @@ import { connect } from './utils/db'
 import { signup, signin, protectApi, checkToken } from './utils/auth'
 import climbingRouteRouter from './resources/climbing/route.router'
 import fingerBoardRouter from './resources/fingerboard/fingerboard.router'
+import strengthRouter from './resources/strength/strength.router'
 import userRouter from './resources/user/user.router'
 import cookieParser from 'cookie-parser'
 
@@ -37,6 +38,7 @@ app.use('/api', protectApi)
 app.use('/api/user', userRouter)
 app.use('/api/climbing/route', climbingRouteRouter)
 app.use('/api/fingerboard/session', fingerBoardRouter)
+app.use('/api/strength/exercise', strengthRouter)
 app.use('/api/checkToken', checkToken)
 
 export const start = async () => {
