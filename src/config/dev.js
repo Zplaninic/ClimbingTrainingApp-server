@@ -1,5 +1,5 @@
 const devConfig = {
-  port: 8080,
+  port: 3000,
   dbUrl: 'mongodb://localhost:27017/climbing-training-api',
   jwt: {
     privateKey: process.env.PRIVATECL_KEY,
