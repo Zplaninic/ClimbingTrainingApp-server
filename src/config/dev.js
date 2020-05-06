@@ -12,5 +12,4 @@ const devConfig = {
   }
 }
 
-console.log(process.env.PRIVATECL_KEY)
 export default devConfig
