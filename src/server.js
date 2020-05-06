@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser'
 
 export const app = express()
 export const setResponseHeaders = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000') // mozda promijenim samo za moj server
+  res.header('Access-Control-Allow-Origin', `${process.env.API_URL}`) // mozda promijenim samo za moj server
   res.header('Access-Control-Allow-Credentials', 'true')
   res.header(
     'Access-Control-Allow-Headers',
@@ -23,7 +23,6 @@ export const setResponseHeaders = (req, res, next) => {
   }
   next()
 }
-
 app.disable('x-powered-by')
 
 app.use(json())
