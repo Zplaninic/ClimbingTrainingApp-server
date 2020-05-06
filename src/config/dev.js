@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+
 const devConfig = {
   port: 3000,
   dbUrl: 'mongodb://localhost:27017/climbing-training-api',
@@ -8,4 +12,5 @@ const devConfig = {
   }
 }
 
+console.log(process.env.PRIVATECL_KEY)
 export default devConfig
