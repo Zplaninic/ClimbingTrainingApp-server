@@ -1,6 +1,6 @@
 import { User } from './../resources/user/user.model'
 import jwt from 'jsonwebtoken'
-import config from './../config/dev'
+import config from './../config/index'
 
 export const newToken = user => {
   return jwt.sign({ id: user.id }, config.jwt.privateKey, {

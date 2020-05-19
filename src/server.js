@@ -1,5 +1,5 @@
 import express from 'express'
-import config from './config/dev'
+import config from './config/index'
 import { json, urlencoded } from 'body-parser'
 import { connect } from './utils/db'
 import { signup, signin, protectApi, checkToken } from './utils/auth'
