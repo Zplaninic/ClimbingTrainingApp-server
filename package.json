@@ -10,7 +10,8 @@
     "dev": "nodemon --exec yarn restart",
     "restart": "rimraf dist && yarn build && yarn start",
     "start": "node dist/index.js",
-    "test-auth": "jest --passWithNoTests -t Authentication:"
+    "test": "jest --forceExit --runInBand  --detectOpenHandles  --silent",
+    "test-auth": "yarn test -t Authentication"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

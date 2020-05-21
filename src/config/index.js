@@ -4,6 +4,7 @@ const env = process.env.NODE_ENV || 'development'
 dotenv.config()
 
 const baseConfig = {
+  env,
   port: 3000,
   jwt: {
     privateKey: process.env.PRIVATECL_KEY,
@@ -18,7 +19,7 @@ switch (env) {
   case 'development':
     envConfig = require('./dev').config
     break
-  case 'testing':
+  case 'test':
     envConfig = require('./testing').config
     break
   default:
