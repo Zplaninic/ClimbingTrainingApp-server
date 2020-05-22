@@ -43,17 +43,19 @@ export const signin = async (req, res) => {
   }
   const invalid = { message: 'Invalid email or password' }
   try {
-    const user = await getUser({ email: req.body.email })
-    if (!user.email) {
-      res.status(401).json(invalid)
+    const existingUser = await getUser({ email: req.body.email })
+
+    if (!existingUser) {
+      return res.status(422).json(invalid)
     }
 
-    const matchPass = await user.comparePassword(req.body.password)
+    const matchPass = await existingUser.comparePassword(req.body.password)
+
     if (!matchPass) {
-      res.status(401).json(invalid)
+      return res.status(422).json(invalid)
     }
 
-    const token = newToken(user)
+    const token = newToken(existingUser)
     return res.cookie('token', token, { httpOnly: true }).sendStatus(200)
   } catch (e) {
     console.error(e)

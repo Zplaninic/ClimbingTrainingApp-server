@@ -1,4 +1,4 @@
-import { newToken, verifyToken, signup } from '../auth'
+import { newToken, verifyToken, signup, signin } from '../auth'
 import config from '../../config/index'
 import jwt from 'jsonwebtoken'
 import { User } from '../../resources/user/user.model'
@@ -32,6 +32,11 @@ function setup() {
     ),
     sendStatus: jest.fn(
       function sendStatus() {
+        return this
+      }.bind(res)
+    ),
+    end: jest.fn(
+      function end() {
         return this
       }.bind(res)
     )
@@ -97,6 +102,68 @@ describe('Authentication', () => {
         .exec()
 
       const token = newToken(user)
+      expect(res.cookie).toHaveBeenCalledTimes(1)
+      expect(res.cookie).toHaveBeenCalledWith('token', token, {
+        httpOnly: true
+      })
+      expect(res.sendStatus).toHaveBeenCalledWith(200)
+    })
+  })
+
+  describe('signin', () => {
+    test('must have email and password', async () => {
+      expect.assertions(4)
+      const { req, res } = setup()
+      await signin(req, res)
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.json).toHaveBeenCalledTimes(1)
+      expect(res.json).toHaveBeenCalledWith({ message: expect.any(String) })
+    })
+
+    test('user must exist', async () => {
+      expect.assertions(4)
+      const { req, res } = setup()
+      req.body = { email: 'hello@hello.com', password: 'hello12345' }
+
+      await signin(req, res)
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(422)
+      expect(res.json).toHaveBeenCalledTimes(1)
+      expect(res.json).toHaveBeenCalledWith({ message: expect.any(String) })
+    })
+
+    test('must match password', async () => {
+      expect.assertions(4)
+
+      const { req, res } = setup()
+      await User.create({
+        email: 'hello@hello.com',
+        password: 'good-password'
+      })
+
+      req.body = { email: 'hello@hello.com', password: 'wrong-password' }
+
+      await signin(req, res)
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(422)
+      expect(res.json).toHaveBeenCalledTimes(1)
+      expect(res.json).toHaveBeenCalledWith({ message: expect.any(String) })
+    })
+
+    test('must create and send token', async () => {
+      const { req, res } = setup()
+      const userData = {
+        email: 'hello@hello.com',
+        password: 'oro4039'
+      }
+
+      const userFromDb = await User.create(userData)
+      req.body = userData
+
+      await signin(req, res)
+
+      const token = newToken(userFromDb)
       expect(res.cookie).toHaveBeenCalledTimes(1)
       expect(res.cookie).toHaveBeenCalledWith('token', token, {
         httpOnly: true
