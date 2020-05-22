@@ -1,6 +1,7 @@
 import { User } from './../resources/user/user.model'
 import jwt from 'jsonwebtoken'
 import config from './../config/index'
+import { getUser } from './db'
 
 export const newToken = user => {
   return jwt.sign({ id: user.id }, config.jwt.privateKey, {
@@ -21,6 +22,11 @@ export const signup = async (req, res) => {
     return res.status(400).json({ message: 'Missing email or password' })
   }
   try {
+    const existingUser = await getUser({ email: req.body.email })
+    if (existingUser) {
+      return res.status(422).json({ errors: { email: 'already taken' } })
+    }
+
     const user = await User.create(req.body)
     const token = newToken(user)
 
@@ -37,9 +43,7 @@ export const signin = async (req, res) => {
   }
   const invalid = { message: 'Invalid email or password' }
   try {
-    const user = await User.findOne({ email: req.body.email })
-      .select('email password')
-      .exec()
+    const user = await getUser({ email: req.body.email })
     if (!user.email) {
       res.status(401).json(invalid)
     }
