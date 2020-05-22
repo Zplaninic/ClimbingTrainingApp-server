@@ -72,8 +72,20 @@ describe('Authentication', () => {
     })
 
     test('user must be unique', async () => {
-      // missing, change logic inside auth.js
+      const { req, res } = setup()
+      req.body = { email: 'hello@hello.com', password: 'hello12345' }
+
+      await User.create(req.body)
+      await signup(req, res)
+
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(422)
+      expect(res.json).toHaveBeenCalledTimes(1)
+      expect(res.json).toHaveBeenCalledWith({
+        errors: { email: expect.any(String) }
+      })
     })
+
     test('recieve data from body and creates user', async () => {
       const { req, res } = setup()
       req.body = { email: 'hello@hello.com', password: 'hello12345' }
