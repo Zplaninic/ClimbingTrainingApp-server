@@ -46,14 +46,5 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.9"
-  },
-  "jest": {
-    "verbose": true,
-    "testURL": "http://localhost/",
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "dist/"
-    ],
-    "restoreMocks": true
   }
 }
