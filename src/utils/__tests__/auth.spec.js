@@ -1,7 +1,8 @@
-import { newToken, verifyToken, signup, signin } from '../auth'
+import { newToken, verifyToken, signup, signin, protectApi } from '../auth'
 import config from '../../config/index'
 import jwt from 'jsonwebtoken'
 import { User } from '../../resources/user/user.model'
+import mongoose from 'mongoose'
 
 function setup() {
   const req = {
@@ -169,6 +170,65 @@ describe('Authentication', () => {
         httpOnly: true
       })
       expect(res.sendStatus).toHaveBeenCalledWith(200)
+    })
+  })
+
+  describe('protectApi', () => {
+    test('must have token inside cookie', async () => {
+      const { req, res } = setup()
+
+      req.cookies = {}
+
+      await protectApi(req, res)
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(401)
+      expect(res.end).toHaveBeenCalledTimes(1)
+    })
+
+    test('must recieve payload from token', async () => {
+      const { req, res } = setup()
+
+      req.cookies = {
+        token: '123456'
+      }
+      await protectApi(req, res)
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(401)
+      expect(res.end).toHaveBeenCalledTimes(1)
+    })
+
+    test('must have a real user from token', async () => {
+      const { req, res } = setup()
+      const token = newToken({ id: mongoose.Types.ObjectId() })
+
+      req.cookies = {
+        token: token
+      }
+
+      await protectApi(req, res)
+
+      expect(res.status).toHaveBeenCalledTimes(1)
+      expect(res.status).toHaveBeenCalledWith(401)
+      expect(res.end).toHaveBeenCalledTimes(1)
+    })
+
+    test('pass the user wihout password', async () => {
+      const { req, res } = setup()
+      const user = await User.create({
+        email: 'hello@hello.com',
+        password: 'good-password'
+      })
+
+      const token = newToken(user)
+
+      req.cookies = {
+        token: token
+      }
+
+      const next = () => {}
+      await protectApi(req, res, next)
+      expect(req.user._id.toString()).toBe(user._id.toString())
+      expect(req.user).not.toHaveProperty('password')
     })
   })
 })
