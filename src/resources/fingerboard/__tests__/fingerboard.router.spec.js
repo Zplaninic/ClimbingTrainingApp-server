@@ -1,6 +1,6 @@
 import router from '../fingerboard.router'
 
-describe('item router', () => {
+describe('fingerboard router', () => {
   test('has crud routes', () => {
     const routes = [
       { path: '/', method: 'get' },

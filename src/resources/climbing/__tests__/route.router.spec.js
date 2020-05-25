@@ -1,6 +1,6 @@
 import router from '../route.router'
 
-describe('item router', () => {
+describe('climbing router', () => {
   test('has crud routes', () => {
     const routes = [
       { path: '/', method: 'get' },

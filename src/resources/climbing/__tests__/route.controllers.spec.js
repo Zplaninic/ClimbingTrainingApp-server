@@ -1,7 +1,7 @@
 import controllers from '../route.controllers'
 import { isFunction } from 'lodash'
 
-describe('route controllers', () => {
+describe('climbing controllers', () => {
   test('has crud controllers', () => {
     const crudMethods = [
       'getOne',

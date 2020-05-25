@@ -1,7 +1,7 @@
 import controllers from '../fingerboard.controllers'
 import { isFunction } from 'lodash'
 
-describe('route controllers', () => {
+describe('fingerboard controllers', () => {
   test('has crud controllers', () => {
     const crudMethods = [
       'getOne',

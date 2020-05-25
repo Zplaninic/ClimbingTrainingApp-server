@@ -1,6 +1,6 @@
 import router from '../strength.router'
 
-describe('item router', () => {
+describe('strength router', () => {
   test('has crud routes', () => {
     const routes = [
       { path: '/', method: 'get' },

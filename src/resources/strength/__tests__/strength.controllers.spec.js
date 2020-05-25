@@ -1,7 +1,7 @@
 import controllers from '../strength.controllers'
 import { isFunction } from 'lodash'
 
-describe('route controllers', () => {
+describe('strength controllers', () => {
   test('has crud controllers', () => {
     const crudMethods = [
       'getOne',
